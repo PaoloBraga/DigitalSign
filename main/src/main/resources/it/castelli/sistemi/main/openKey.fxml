@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="131.0" prefWidth="238.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.castelli.sistemi.main.OpenKeyController">
+    <children>
+        <Label layoutX="9.0" layoutY="10.0" text="Select your private and public key to load"/>
+        <Button layoutX="66.0" layoutY="35.0" mnemonicParsing="false" onAction="#loadPublic" text="Public"/>
+        <Button layoutX="130.0" layoutY="34.0" mnemonicParsing="false" onAction="#loadPrivate" text="Private"/>
+        <Button fx:id="load" layoutX="187.0" layoutY="96.0" mnemonicParsing="false" onAction="#loadKeys" text="Load"/>
+        <Button layoutX="9.0" layoutY="96.0" mnemonicParsing="false" onAction="#cancelLoad" text="Cancel"/>
+        <TextField fx:id="pairName" layoutX="45.0" layoutY="66.0" promptText="Name of the keys pair"/>
+    </children>
+</AnchorPane>

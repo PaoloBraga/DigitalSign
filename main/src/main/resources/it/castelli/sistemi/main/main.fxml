@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.castelli.sistemi.main.MainController">
+    <ListView fx:id="keyListView" layoutX="456.0" layoutY="121.0" onMouseClicked="#selectKey" prefHeight="395.0"
+              prefWidth="232.0"/>
+    <TextArea fx:id="privateKey" editable="false" layoutX="7.0" layoutY="325.0" prefHeight="245.0" prefWidth="413.0"
+              wrapText="true"/>
+    <TextArea fx:id="publicKey" editable="false" layoutX="14.0" layoutY="32.0" prefHeight="267.0" prefWidth="413.0"
+              wrapText="true"/>
+    <Button layoutX="456.0" layoutY="531.0" mnemonicParsing="false" onAction="#loadKey" text="Load key"/>
+    <Button layoutX="455.0" layoutY="562.0" mnemonicParsing="false" onAction="#generateKey" text="Generate key"/>
+    <Button fx:id="verifyButton" layoutX="455.0" layoutY="23.0" mnemonicParsing="false" onAction="#verifyDocument"
+            text="Verify document"/>
+    <Button fx:id="saveKey" layoutX="619.0" layoutY="531.0" mnemonicParsing="false" onAction="#saveKey"
+            text="Save key"/>
+    <Button layoutX="659.0" layoutY="23.0" mnemonicParsing="false" onAction="#help" text="?"/>
+    <Label layoutX="213.0" layoutY="9.0" text="Public"/>
+    <Label layoutX="203.0" layoutY="308.0" text="Private"/>
+    <Button fx:id="signButton" layoutX="455.0" layoutY="55.0" mnemonicParsing="false" onAction="#signDocument"
+            text="Sign document"/>
+    <Label layoutX="542.0" layoutY="95.0" text="Key History"/>
+    <Label fx:id="statusLabel" layoutX="550.0" layoutY="566.0" textAlignment="CENTER"/>
+</AnchorPane>
