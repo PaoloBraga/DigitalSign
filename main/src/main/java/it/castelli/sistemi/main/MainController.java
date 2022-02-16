@@ -1,5 +1,7 @@
 package it.castelli.sistemi.main;
 
+import it.castelli.sistemi.main.documentManipulation.SignDocument;
+import it.castelli.sistemi.main.documentManipulation.VerifyDocument;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +19,8 @@ import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -29,6 +33,16 @@ public class MainController implements Initializable {
 
     FileChooser fileChooser = new FileChooser();
     File fileSaver;
+
+    Signature dsa;
+
+    {
+        try {
+            dsa = Signature.getInstance("SHA1withDSA", "SUN");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setLoadKey(boolean loadKey) {
         this.loadKey = loadKey;
@@ -169,35 +183,37 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    void signDocument() throws IOException {
+    void signDocument() throws IOException, SignatureException, InvalidKeyException {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open document to sign");
         File file = fileChooser.showOpenDialog(owner);
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+//        FileReader fileReader = new FileReader(file);
+//        BufferedReader bufferedReader = new BufferedReader(fileReader);
 //        bufferedReader.lines();
-        // TODO: 15/02/2022 add the sign algorithm
+        SignDocument signDocument = new SignDocument(currentKeys.getPrv(), currentKeys.getPub(), dsa);
         fileChooser.setTitle("Save signed document");
         fileChooser.setInitialFileName(file.getName() + "Signed");
         fileSaver = fileChooser.showSaveDialog(owner);
         if (fileSaver != null) {
-            // TODO: 15/02/2022 substitute 'text' with result of sign (pay attention of carriage return)
-//            SaveFile('text', fileSaver);
+            SaveFile(signDocument.sign(file), fileSaver);
         }
         statusLabel.setText("Signed document");
 
     }
 
     @FXML
-    void verifyDocument() throws FileNotFoundException {
-        fileChooser.setTitle("Open document to verify");
+    void verifyDocument() throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All types", "*"));
+        fileChooser.setTitle("Open signature");
+        File fileSignature = fileChooser.showOpenDialog(owner);
+        fileChooser.setTitle("Open document to verify");
         File file = fileChooser.showOpenDialog(owner);
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+//        FileReader fileReader = new FileReader(file);
+//        BufferedReader bufferedReader = new BufferedReader(fileReader);
 //        bufferedReader.lines();
         // TODO: 15/02/2022 add the verify algorithm and replace 'true' with the result of verification
-        if (true) {
+        VerifyDocument verifyDocument = new VerifyDocument(currentKeys.getPrv(), currentKeys.getPub(), dsa);
+        if (verifyDocument.verify(fileSignature, file)) {
             statusLabel.setText("Document verified");
         } else {
             statusLabel.setText("Document not verified");
