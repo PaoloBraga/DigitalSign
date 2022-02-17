@@ -12,12 +12,19 @@ public class VerifyDocument {
     PrivateKey privateKey;
     PublicKey publicKey;
 
-    Signature signature;
+    Signature dsa;
+    
+    {
+        try{
+            dsa = Signature.getInstance("SHA1withDSA", "SUN");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public VerifyDocument (PrivateKey privateKey, PublicKey publicKey, Signature signature) {
+    public VerifyDocument (PrivateKey privateKey, PublicKey publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
-        this.signature = signature;
     }
 
     public boolean verify(File file, File baseFile) throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
@@ -28,7 +35,7 @@ public class VerifyDocument {
 
         sigfis.close();
 
-        signature.initVerify(publicKey);
+        dsa.initVerify(publicKey);
 
         FileInputStream datafis = new FileInputStream(baseFile);
         BufferedInputStream bufin = new BufferedInputStream(datafis);
@@ -37,11 +44,11 @@ public class VerifyDocument {
         int len;
         while (bufin.available() != 0) {
             len = bufin.read(buffer);
-            signature.update(buffer, 0, len);
+            dsa.update(buffer, 0, len);
         };
 
         bufin.close();
 
-        return signature.verify(sigToVerify);
+        return dsa.verify(sigToVerify);
     }
 }
