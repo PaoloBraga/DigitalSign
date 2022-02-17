@@ -212,11 +212,14 @@ public class MainController implements Initializable {
     }
 
 
-    private void SaveFile(String content, File file) {
+    private void SaveFile(bytes[] content, File file) {
         try {
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(content);
-            fileWriter.close();
+            FileOutputStream fileOutputStream = new FileOutputStream(file.getAbsolutePath());
+            fileOutputStream.write(content);
+            fileOutputStream.close();
+//            FileWriter fileWriter = new FileWriter(file);
+//            fileWriter.write(content);
+//            fileWriter.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
