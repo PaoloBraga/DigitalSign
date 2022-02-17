@@ -27,18 +27,17 @@ public class VerifyDocument {
         this.publicKey = publicKey;
     }
 
-    public boolean verify(File file, File baseFile) throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
+    public boolean verify(FileInputStream fileInputStreamSignature, FileInputStream fileInputStream) throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 
-        FileInputStream sigfis = new FileInputStream(file);
+        FileInputStream sigfis = new FileInputStream(fileInputStreamSignature);
         byte[] sigToVerify = new byte[sigfis.available()];
-        sigfis.read(sigToVerify );
+        sigfis.read(sigToVerify);
 
         sigfis.close();
 
         dsa.initVerify(publicKey);
 
-        FileInputStream datafis = new FileInputStream(baseFile);
-        BufferedInputStream bufin = new BufferedInputStream(datafis);
+        BufferedInputStream bufin = new BufferedInputStream(fileInputStream);
 
         byte[] buffer = new byte[1024];
         int len;
