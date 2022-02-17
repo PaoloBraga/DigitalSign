@@ -26,10 +26,14 @@ public class Keys {
         this.pub = pub;
     }
 
-    public Keys(String name, String publicKey, String privateKey) {
+    public Keys(String name, bytes[] pub, bytes[] prv) {
         this.name = name;
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
+        KeyFactory keyFactory = new KeyFactory("DSA");
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(pub);
+        this.pub = keyFactory.generatePublic(x509EncodedKeySpec);
+        // Bisogna aggiungere la dichiarazione di publicKey e privateKey con la classe Base64
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(prv);
+        this.prv = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
     }
 
     public String getName() {
