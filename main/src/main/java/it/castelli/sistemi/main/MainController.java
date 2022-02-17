@@ -180,7 +180,7 @@ public class MainController implements Initializable {
 //        FileReader fileReader = new FileReader(file);
 //        BufferedReader bufferedReader = new BufferedReader(fileReader);
 //        bufferedReader.lines();
-        SignDocument signDocument = new SignDocument(currentKeys.getPrv(), currentKeys.getPub(), dsa);
+        SignDocument signDocument = new SignDocument(currentKeys.getPrv(), currentKeys.getPub());
         fileChooser.setTitle("Save signed document");
         fileChooser.setInitialFileName(file.getName() + "Signed");
         fileSaver = fileChooser.showSaveDialog(owner);
