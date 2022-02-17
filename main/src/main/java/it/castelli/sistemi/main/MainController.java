@@ -140,7 +140,7 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Save public key");
         fileSaver = fileChooser.showSaveDialog(owner);
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PublicKey");
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(currentKeys.getPublicKey().getEncoded());
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(currentKeys.getPub().getEncoded());
         if (fileSaver != null) {
             SaveFile(x509EncodedKeySpec.getEncoded(), fileSaver);
         }
@@ -148,7 +148,7 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Save private key");
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PrivateKey");
         fileSaver = fileChooser.showSaveDialog(owner);
-        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(currentKeys.getPrivateKey().getEncoded());
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(currentKeys.getPrv().getEncoded());
         if (fileSaver != null) {
             SaveFile(pkcs8EncodedKeySpec.getEncoded(), fileSaver);
         }
