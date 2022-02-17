@@ -12,10 +12,17 @@ public class SignDocument {
     PublicKey publicKey;
 
     Signature dsa;
-    public SignDocument(PrivateKey privateStr, PublicKey publicStr, Signature dsa) {
+
+    {
+        try {
+            dsa = Signature.getInstance("SHA1withDSA", "SUN");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            e.printStackTrace();
+        }
+    }
+    public SignDocument(PrivateKey privateStr, PublicKey publicStr) {
         this.privateKey = privateStr;
         this.publicKey = publicStr;
-        this.dsa = dsa;
     }
 
     public String sign(File file) throws InvalidKeyException, IOException, SignatureException {
