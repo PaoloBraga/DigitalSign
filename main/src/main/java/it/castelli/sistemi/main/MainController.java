@@ -202,7 +202,7 @@ public class MainController implements Initializable {
 //        BufferedReader bufferedReader = new BufferedReader(fileReader);
 //        bufferedReader.lines();
         // TODO: 15/02/2022 add the verify algorithm and replace 'true' with the result of verification
-        VerifyDocument verifyDocument = new VerifyDocument(currentKeys.getPrv(), currentKeys.getPub(), dsa);
+        VerifyDocument verifyDocument = new VerifyDocument(currentKeys.getPrv(), currentKeys.getPub());
         if (verifyDocument.verify(fileSignature, file)) {
             statusLabel.setText("Document verified");
         } else {
