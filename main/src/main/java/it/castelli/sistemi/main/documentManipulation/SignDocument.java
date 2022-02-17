@@ -25,7 +25,7 @@ public class SignDocument {
         this.publicKey = publicStr;
     }
 
-    public String sign(FileInputStream fileInputStream) throws InvalidKeyException, IOException, SignatureException {
+    public bytes[] sign(FileInputStream fileInputStream) throws InvalidKeyException, IOException, SignatureException {
 
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
         dsa.initSign(privateKey);
@@ -41,6 +41,6 @@ public class SignDocument {
 
         byte[] realSig = dsa.sign();
 
-        return Base64.getEncoder().encodeToString(realSig);
+        return realSig;
     }
 }
