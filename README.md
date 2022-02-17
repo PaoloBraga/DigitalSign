@@ -4,10 +4,11 @@
 
 ### Code
 
-- [ ] generate a pair of keys
+- [x] generate a pair of keys
 - [x] save key
 - [ ] sign file
 - [ ] verify sign file
+- [ ] change the location of file
 
 ### Graphic
 
