@@ -199,12 +199,14 @@ public class MainController implements Initializable {
         File fileSignature = fileChooser.showOpenDialog(owner);
         fileChooser.setTitle("Open document to verify");
         File file = fileChooser.showOpenDialog(owner);
+        FileInputStream fileInputStreamSignature = new FileInputStream(fileSignature.getAbsolutePath());
+        FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
 //        FileReader fileReader = new FileReader(file);
 //        BufferedReader bufferedReader = new BufferedReader(fileReader);
 //        bufferedReader.lines();
         // TODO: 15/02/2022 add the verify algorithm and replace 'true' with the result of verification
         VerifyDocument verifyDocument = new VerifyDocument(currentKeys.getPrv(), currentKeys.getPub());
-        if (verifyDocument.verify(fileSignature, file)) {
+        if (verifyDocument.verify(fileInputStreamSignature, fileInputStream)) {
             statusLabel.setText("Document verified");
         } else {
             statusLabel.setText("Document not verified");
