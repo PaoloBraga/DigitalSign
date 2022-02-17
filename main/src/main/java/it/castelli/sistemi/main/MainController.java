@@ -140,15 +140,17 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Save public key");
         fileSaver = fileChooser.showSaveDialog(owner);
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PublicKey");
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(currentKeys.getPublicKey().getEncoded());
         if (fileSaver != null) {
-            SaveFile(currentKeys.getPublicKey(), fileSaver);
+            SaveFile(x509EncodedKeySpec.getEncoded(), fileSaver);
         }
         // Saving private key
         fileChooser.setTitle("Save private key");
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PrivateKey");
         fileSaver = fileChooser.showSaveDialog(owner);
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(currentKeys.getPrivateKey().getEncoded());
         if (fileSaver != null) {
-            SaveFile(currentKeys.getPrivateKey(), fileSaver);
+            SaveFile(pkcs8EncodedKeySpec.getEncoded(), fileSaver);
         }
         statusLabel.setText("keys saved");
     }
