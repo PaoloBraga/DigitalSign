@@ -34,16 +34,6 @@ public class MainController implements Initializable {
     FileChooser fileChooser = new FileChooser();
     File fileSaver;
 
-    Signature dsa;
-
-    {
-        try {
-            dsa = Signature.getInstance("SHA1withDSA", "SUN");
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setLoadKey(boolean loadKey) {
         this.loadKey = loadKey;
     }
