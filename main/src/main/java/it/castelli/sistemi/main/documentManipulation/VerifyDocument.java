@@ -29,11 +29,10 @@ public class VerifyDocument {
 
     public boolean verify(FileInputStream fileInputStreamSignature, FileInputStream fileInputStream) throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 
-        FileInputStream sigfis = new FileInputStream(fileInputStreamSignature);
-        byte[] sigToVerify = new byte[sigfis.available()];
-        sigfis.read(sigToVerify);
+        byte[] sigToVerify = new byte[fileInputStreamSignature.available()];
+        fileInputStreamSignature.read(sigToVerify);
 
-        sigfis.close();
+        fileInputStreamSignature.close();
 
         dsa.initVerify(publicKey);
 
