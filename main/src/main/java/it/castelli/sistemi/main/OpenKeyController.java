@@ -24,8 +24,8 @@ public class OpenKeyController implements Initializable {
     Window owner = Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
 
 
-    private String publicKey;
-    private String privateKey;
+    private bytes[] publicKey;
+    private bytes[] privateKey;
 
     FileChooser fileChooser = new FileChooser();
     File file;
@@ -73,9 +73,12 @@ public class OpenKeyController implements Initializable {
         currentStage.setAlwaysOnTop(false);
         fileChooser.setTitle("Open Private key");
         try {
-            privateKey = openFile();
-            if (privateKey == null)
+            File file = openFile();
+            if (file == null)
                 return;
+            FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
+            privateKey = new bytes[(int) file.length()];
+            fileInputStream.read(privateKey);
             loadingProgressPrivate = true;
             checkLoadingProgress();
         } catch (IOException e) {
@@ -91,9 +94,12 @@ public class OpenKeyController implements Initializable {
         currentStage.setAlwaysOnTop(false);
         fileChooser.setTitle("Open Public key");
         try {
-            publicKey = openFile();
-            if (publicKey == null)
+            File file = openFile();
+            if (file == null)
                 return;
+            FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
+            publicKey = new bytes[(int) file.length()];
+            fileInputStream.read(publicKey);
             loadingProgressPublic = true;
             checkLoadingProgress();
         } catch (IOException e) {
@@ -109,13 +115,13 @@ public class OpenKeyController implements Initializable {
         }
     }
 
-    private String openFile() throws IOException {
+    private File openFile() throws IOException {
         file = fileChooser.showOpenDialog(owner);
         if (file == null)
             return null;
-        fileReader = new FileReader(file);
-        bufferedReader = new BufferedReader(fileReader);
-        return bufferedReader.readLine();
+//        fileReader = new FileReader(file);
+//        bufferedReader = new BufferedReader(fileReader);
+        return file;
     }
 
 
