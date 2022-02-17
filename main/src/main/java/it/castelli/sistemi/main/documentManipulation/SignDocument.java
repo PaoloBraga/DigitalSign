@@ -25,9 +25,9 @@ public class SignDocument {
         this.publicKey = publicStr;
     }
 
-    public String sign(File file) throws InvalidKeyException, IOException, SignatureException {
+    public String sign(FileInputStream fileInputStream) throws InvalidKeyException, IOException, SignatureException {
 
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
         dsa.initSign(privateKey);
         byte[] buffer = new byte[1024];
         int len;
