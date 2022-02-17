@@ -177,6 +177,7 @@ public class MainController implements Initializable {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open document to sign");
         File file = fileChooser.showOpenDialog(owner);
+        FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
 //        FileReader fileReader = new FileReader(file);
 //        BufferedReader bufferedReader = new BufferedReader(fileReader);
 //        bufferedReader.lines();
@@ -185,7 +186,7 @@ public class MainController implements Initializable {
         fileChooser.setInitialFileName(file.getName() + "Signed");
         fileSaver = fileChooser.showSaveDialog(owner);
         if (fileSaver != null) {
-            SaveFile(signDocument.sign(file), fileSaver);
+            SaveFile(signDocument.sign(fileInputStream), fileSaver);
         }
         statusLabel.setText("Signed document");
 
