@@ -6,9 +6,9 @@
 
 - [x] generate a pair of keys
 - [x] save key
-- [ ] sign file
-- [ ] verify sign file
-- [ ] change the location of file
+- [x] sign file
+- [x] verify sign file
+- [x] change the location of file
 
 ### Graphic
 
