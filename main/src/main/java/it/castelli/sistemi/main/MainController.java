@@ -38,6 +38,7 @@ public class MainController implements Initializable {
     private boolean generateKey = false;
     public Keys newKeys;
     private Keys currentKeys;
+    public static File lastUsedDirectory = null;
 
     FileChooser fileChooser = new FileChooser();
     File fileSaver;
@@ -148,7 +149,11 @@ public class MainController implements Initializable {
         // Saving public key
         fileChooser.setTitle("Save public key");
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PublicKey");
+        if (lastUsedDirectory != null){
+            fileChooser.setInitialDirectory(lastUsedDirectory);
+        }
         fileSaver = fileChooser.showSaveDialog(owner);
+        lastUsedDirectory = fileSaver;
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(currentKeys.getPub().getEncoded());
         if (fileSaver != null) {
             SaveFile(x509EncodedKeySpec.getEncoded(), fileSaver);
@@ -156,7 +161,11 @@ public class MainController implements Initializable {
         // Saving private key
         fileChooser.setTitle("Save private key");
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PrivateKey");
+        if (lastUsedDirectory != null){
+            fileChooser.setInitialDirectory(lastUsedDirectory);
+        }
         fileSaver = fileChooser.showSaveDialog(owner);
+        lastUsedDirectory = fileSaver;
         PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(currentKeys.getPrv().getEncoded());
         if (fileSaver != null) {
             SaveFile(pkcs8EncodedKeySpec.getEncoded(), fileSaver);
@@ -188,15 +197,23 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open document to sign");
+        if (lastUsedDirectory != null){
+            fileChooser.setInitialDirectory(lastUsedDirectory);
+        }
         File file = fileChooser.showOpenDialog(owner);
+        lastUsedDirectory = file;
         FileInputStream fileInputStream = null;
         if (file != null)
             fileInputStream = new FileInputStream(file.getAbsolutePath());
         SignDocument signDocument = new SignDocument(currentKeys.getPrv(), currentKeys.getPub());
         fileChooser.setTitle("Save signed document");
         assert file != null;
-        fileChooser.setInitialFileName(file.getName().substring(0, file.getName().indexOf(".")) + "Signed." + file.getName().substring(file.getName().indexOf(".")));
+        fileChooser.setInitialFileName(file.getName().substring(0, file.getName().indexOf(".")) + "Signed" + file.getName().substring(file.getName().indexOf(".")));
+        if (lastUsedDirectory != null){
+            fileChooser.setInitialDirectory(lastUsedDirectory);
+        }
         fileSaver = fileChooser.showSaveDialog(owner);
+        lastUsedDirectory = fileSaver;
         if (fileSaver != null) {
             SaveFile(signDocument.sign(fileInputStream), fileSaver);
         }
@@ -205,11 +222,15 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    void verifyDocument() throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
+    void verifyDocument() throws IOException, SignatureException, InvalidKeyException {
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open signature");
+        if (lastUsedDirectory != null){
+            fileChooser.setInitialDirectory(lastUsedDirectory);
+        }
         File fileSignature = fileChooser.showOpenDialog(owner);
+        lastUsedDirectory =fileSignature;
         fileChooser.setTitle("Open document to verify");
         File file = fileChooser.showOpenDialog(owner);
         FileInputStream fileInputStreamSignature = new FileInputStream(fileSignature.getAbsolutePath());

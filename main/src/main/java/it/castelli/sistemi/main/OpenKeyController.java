@@ -16,6 +16,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ResourceBundle;
 
+import static it.castelli.sistemi.main.MainController.lastUsedDirectory;
+
 public class OpenKeyController implements Initializable {
 
     private boolean loadingProgressPublic;
@@ -119,11 +121,13 @@ public class OpenKeyController implements Initializable {
     private File openFile() throws IOException {
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Key", "*.key"));
+        if (lastUsedDirectory != null){
+            fileChooser.setInitialDirectory(lastUsedDirectory);
+        }
         file = fileChooser.showOpenDialog(owner);
+        lastUsedDirectory = file;
         if (file == null)
             return null;
-//        fileReader = new FileReader(file);
-//        bufferedReader = new BufferedReader(fileReader);
         return file;
     }
 
