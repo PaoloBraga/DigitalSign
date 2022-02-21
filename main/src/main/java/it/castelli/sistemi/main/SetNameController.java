@@ -1,13 +1,11 @@
 package it.castelli.sistemi.main;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
 
 public class SetNameController {
 
@@ -15,13 +13,13 @@ public class SetNameController {
     private TextField pairKeyName;
 
     @FXML
-    void cancel(ActionEvent event) {
+    void cancel() {
         Stage stage = (Stage) pairKeyName.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    void generateButton(ActionEvent event) throws NoSuchAlgorithmException, NoSuchProviderException {
+    void generateButton() throws NoSuchAlgorithmException, NoSuchProviderException {
         if (pairKeyName.getText().isBlank()) {
             pairKeyName.setText("Keys " + MainController.getInstance().counterClass);
             MainController.getInstance().counterClass++;

@@ -1,15 +1,18 @@
 package it.castelli.sistemi.main;
 
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class Keys {
-    private String name;
-    private String publicKey;
-    private String privateKey;
+    private final String name;
+    private final String publicKey;
+    private final String privateKey;
     private PrivateKey prv;
     private PublicKey pub;
 
@@ -46,24 +49,12 @@ public class Keys {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPublicKey() {
         return publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
     public String getPrivateKey() {
         return privateKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
     }
 
     @Override

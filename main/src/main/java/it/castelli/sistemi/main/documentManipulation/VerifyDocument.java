@@ -1,33 +1,31 @@
 package it.castelli.sistemi.main.documentManipulation;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
 public class VerifyDocument {
     PrivateKey privateKey;
     PublicKey publicKey;
 
     Signature dsa;
-    
+
     {
-        try{
+        try {
             dsa = Signature.getInstance("SHA1withDSA", "SUN");
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             e.printStackTrace();
         }
     }
 
-    public VerifyDocument (PrivateKey privateKey, PublicKey publicKey) {
+    public VerifyDocument(PrivateKey privateKey, PublicKey publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
     }
 
-    public boolean verify(FileInputStream fileInputStreamSignature, FileInputStream fileInputStream) throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
+    public boolean verify(FileInputStream fileInputStreamSignature, FileInputStream fileInputStream) throws IOException, SignatureException, InvalidKeyException {
 
         byte[] sigToVerify = new byte[fileInputStreamSignature.available()];
         fileInputStreamSignature.read(sigToVerify);
@@ -43,7 +41,8 @@ public class VerifyDocument {
         while (bufin.available() != 0) {
             len = bufin.read(buffer);
             dsa.update(buffer, 0, len);
-        };
+        }
+        ;
 
         bufin.close();
 

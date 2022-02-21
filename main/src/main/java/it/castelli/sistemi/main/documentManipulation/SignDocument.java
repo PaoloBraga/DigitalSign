@@ -1,6 +1,8 @@
 package it.castelli.sistemi.main.documentManipulation;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.*;
 
 public class SignDocument {
@@ -17,6 +19,7 @@ public class SignDocument {
             e.printStackTrace();
         }
     }
+
     public SignDocument(PrivateKey privateStr, PublicKey publicStr) {
         this.privateKey = privateStr;
         this.publicKey = publicStr;

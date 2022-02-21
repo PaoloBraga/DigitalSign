@@ -16,10 +16,16 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -185,11 +191,11 @@ public class MainController implements Initializable {
         File file = fileChooser.showOpenDialog(owner);
         FileInputStream fileInputStream = null;
         if (file != null)
-        fileInputStream = new FileInputStream(file.getAbsolutePath());
+            fileInputStream = new FileInputStream(file.getAbsolutePath());
         SignDocument signDocument = new SignDocument(currentKeys.getPrv(), currentKeys.getPub());
         fileChooser.setTitle("Save signed document");
         assert file != null;
-        fileChooser.setInitialFileName(file.getName().substring(0,file.getName().indexOf(".")) + "Signed." + file.getName().substring(file.getName().indexOf(".")));
+        fileChooser.setInitialFileName(file.getName().substring(0, file.getName().indexOf(".")) + "Signed." + file.getName().substring(file.getName().indexOf(".")));
         fileSaver = fileChooser.showSaveDialog(owner);
         if (fileSaver != null) {
             SaveFile(signDocument.sign(fileInputStream), fileSaver);

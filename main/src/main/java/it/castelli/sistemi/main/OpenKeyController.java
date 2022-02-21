@@ -1,6 +1,5 @@
 package it.castelli.sistemi.main;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,7 +8,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -27,8 +28,6 @@ public class OpenKeyController implements Initializable {
 
     FileChooser fileChooser = new FileChooser();
     File file;
-    FileReader fileReader;
-    BufferedReader bufferedReader;
 
 
     @FXML
@@ -48,13 +47,13 @@ public class OpenKeyController implements Initializable {
     }
 
     @FXML
-    void cancelLoad(ActionEvent event) {
+    void cancelLoad() {
         Stage currentStage = (Stage) load.getScene().getWindow();
         currentStage.close();
     }
 
     @FXML
-    void loadKeys(ActionEvent event) {
+    void loadKeys() {
         if (pairName.getText().isBlank()) {
             pairName.setText("Keys " + MainController.getInstance().counterClass);
             MainController.getInstance().counterClass++;
@@ -70,7 +69,7 @@ public class OpenKeyController implements Initializable {
     }
 
     @FXML
-    void loadPrivate(ActionEvent event) {
+    void loadPrivate() {
         Stage currentStage = (Stage) load.getScene().getWindow();
         currentStage.setAlwaysOnTop(false);
         fileChooser.setTitle("Open Private key");
@@ -91,7 +90,7 @@ public class OpenKeyController implements Initializable {
     }
 
     @FXML
-    void loadPublic(ActionEvent event) {
+    void loadPublic() {
         Stage currentStage = (Stage) load.getScene().getWindow();
         currentStage.setAlwaysOnTop(false);
         fileChooser.setTitle("Open Public key");
