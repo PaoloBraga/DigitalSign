@@ -21,6 +21,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -100,7 +102,7 @@ public class MainController implements Initializable {
     @FXML
     void help() {
         try {
-            Desktop.getDesktop().browse(new URL("https://github.com/FilippoHoch/DigitalSign").toURI());
+            Desktop.getDesktop().browse(new URL("https://github.com/PaoloBraga/DigitalSign").toURI());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -135,11 +137,12 @@ public class MainController implements Initializable {
 
     @FXML
     void saveKey() {
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Key", "*.key"));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Key", "*.key"));
         // Saving public key
         fileChooser.setTitle("Save public key");
-        fileSaver = fileChooser.showSaveDialog(owner);
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PublicKey");
+        fileSaver = fileChooser.showSaveDialog(owner);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(currentKeys.getPub().getEncoded());
         if (fileSaver != null) {
             SaveFile(x509EncodedKeySpec.getEncoded(), fileSaver);
@@ -176,16 +179,17 @@ public class MainController implements Initializable {
 
     @FXML
     void signDocument() throws IOException, SignatureException, InvalidKeyException {
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All types", "*"));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open document to sign");
         File file = fileChooser.showOpenDialog(owner);
-        FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
-//        FileReader fileReader = new FileReader(file);
-//        BufferedReader bufferedReader = new BufferedReader(fileReader);
-//        bufferedReader.lines();
+        FileInputStream fileInputStream = null;
+        if (file != null)
+        fileInputStream = new FileInputStream(file.getAbsolutePath());
         SignDocument signDocument = new SignDocument(currentKeys.getPrv(), currentKeys.getPub());
         fileChooser.setTitle("Save signed document");
-        fileChooser.setInitialFileName(file.getName() + "Signed");
+        assert file != null;
+        fileChooser.setInitialFileName(file.getName().substring(0,file.getName().indexOf(".")) + "Signed." + file.getName().substring(file.getName().indexOf(".")));
         fileSaver = fileChooser.showSaveDialog(owner);
         if (fileSaver != null) {
             SaveFile(signDocument.sign(fileInputStream), fileSaver);
@@ -196,17 +200,14 @@ public class MainController implements Initializable {
 
     @FXML
     void verifyDocument() throws IOException, SignatureException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All types", "*"));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open signature");
         File fileSignature = fileChooser.showOpenDialog(owner);
         fileChooser.setTitle("Open document to verify");
         File file = fileChooser.showOpenDialog(owner);
         FileInputStream fileInputStreamSignature = new FileInputStream(fileSignature.getAbsolutePath());
         FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
-//        FileReader fileReader = new FileReader(file);
-//        BufferedReader bufferedReader = new BufferedReader(fileReader);
-//        bufferedReader.lines();
-        // TODO: 15/02/2022 add the verify algorithm and replace 'true' with the result of verification
         VerifyDocument verifyDocument = new VerifyDocument(currentKeys.getPrv(), currentKeys.getPub());
         if (verifyDocument.verify(fileInputStreamSignature, fileInputStream)) {
             statusLabel.setText("Document verified");
@@ -216,14 +217,11 @@ public class MainController implements Initializable {
     }
 
 
-    private void SaveFile(bytes[] content, File file) {
+    private void SaveFile(byte[] content, File file) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file.getAbsolutePath());
             fileOutputStream.write(content);
             fileOutputStream.close();
-//            FileWriter fileWriter = new FileWriter(file);
-//            fileWriter.write(content);
-//            fileWriter.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

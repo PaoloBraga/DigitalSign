@@ -2,9 +2,6 @@ package it.castelli.sistemi.main.documentManipulation;
 
 import java.io.*;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
 public class SignDocument {
 
@@ -25,7 +22,7 @@ public class SignDocument {
         this.publicKey = publicStr;
     }
 
-    public bytes[] sign(FileInputStream fileInputStream) throws InvalidKeyException, IOException, SignatureException {
+    public byte[] sign(FileInputStream fileInputStream) throws InvalidKeyException, IOException, SignatureException {
 
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
         dsa.initSign(privateKey);
@@ -35,12 +32,10 @@ public class SignDocument {
         while (bufferedInputStream.available() != 0) {
             len = bufferedInputStream.read(buffer);
             dsa.update(buffer, 0, len);
-        };
+        }
 
         bufferedInputStream.close();
 
-        byte[] realSig = dsa.sign();
-
-        return realSig;
+        return dsa.sign();
     }
 }

@@ -9,11 +9,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ResourceBundle;
 
 public class OpenKeyController implements Initializable {
@@ -23,9 +22,8 @@ public class OpenKeyController implements Initializable {
 
     Window owner = Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
 
-
-    private bytes[] publicKey;
-    private bytes[] privateKey;
+    private byte[] publicKey;
+    private byte[] privateKey;
 
     FileChooser fileChooser = new FileChooser();
     File file;
@@ -62,7 +60,11 @@ public class OpenKeyController implements Initializable {
             MainController.getInstance().counterClass++;
         }
         MainController.getInstance().setLoadKey(true);
-        MainController.getInstance().newKeys = new Keys(pairName.getText(), publicKey, privateKey);
+        try {
+            MainController.getInstance().newKeys = new Keys(pairName.getText(), publicKey, privateKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
         Stage currentStage = (Stage) load.getScene().getWindow();
         currentStage.close();
     }
@@ -77,7 +79,7 @@ public class OpenKeyController implements Initializable {
             if (file == null)
                 return;
             FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
-            privateKey = new bytes[(int) file.length()];
+            privateKey = new byte[(int) file.length()];
             fileInputStream.read(privateKey);
             loadingProgressPrivate = true;
             checkLoadingProgress();
@@ -98,7 +100,7 @@ public class OpenKeyController implements Initializable {
             if (file == null)
                 return;
             FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
-            publicKey = new bytes[(int) file.length()];
+            publicKey = new byte[(int) file.length()];
             fileInputStream.read(publicKey);
             loadingProgressPublic = true;
             checkLoadingProgress();
@@ -116,6 +118,8 @@ public class OpenKeyController implements Initializable {
     }
 
     private File openFile() throws IOException {
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Key", "*.key"));
         file = fileChooser.showOpenDialog(owner);
         if (file == null)
             return null;

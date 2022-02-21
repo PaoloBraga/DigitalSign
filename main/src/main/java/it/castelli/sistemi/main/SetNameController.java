@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 public class SetNameController {
@@ -32,7 +33,11 @@ public class SetNameController {
         keyGen.initialize(1024, random);
 
         KeyPair pair = keyGen.generateKeyPair();
-        MainController.getInstance().newKeys = new Keys(pairKeyName.getText(), Base64.getEncoder().encodeToString(pair.getPublic().getEncoded()), Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded()));
+        try {
+            MainController.getInstance().newKeys = new Keys(pairKeyName.getText(), pair.getPublic().getEncoded(), pair.getPrivate().getEncoded());
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
         MainController.getInstance().newKeys.setPrv(pair.getPrivate());
         MainController.getInstance().newKeys.setPub(pair.getPublic());
 
