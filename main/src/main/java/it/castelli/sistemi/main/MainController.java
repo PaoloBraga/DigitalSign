@@ -150,7 +150,7 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Save public key");
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PublicKey");
         if (lastUsedDirectory != null){
-            fileChooser.setInitialDirectory(lastUsedDirectory);
+            fileChooser.setInitialDirectory(new File(lastUsedDirectory.getParent()));
         }
         fileSaver = fileChooser.showSaveDialog(owner);
         lastUsedDirectory = fileSaver;
@@ -162,7 +162,7 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Save private key");
         fileChooser.setInitialFileName(currentKeys.getName().trim() + "PrivateKey");
         if (lastUsedDirectory != null){
-            fileChooser.setInitialDirectory(lastUsedDirectory);
+            fileChooser.setInitialDirectory(new File(lastUsedDirectory.getParent()));
         }
         fileSaver = fileChooser.showSaveDialog(owner);
         lastUsedDirectory = fileSaver;
@@ -198,7 +198,7 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open document to sign");
         if (lastUsedDirectory != null){
-            fileChooser.setInitialDirectory(lastUsedDirectory);
+            fileChooser.setInitialDirectory(new File(lastUsedDirectory.getParent()));
         }
         File file = fileChooser.showOpenDialog(owner);
         lastUsedDirectory = file;
@@ -210,7 +210,7 @@ public class MainController implements Initializable {
         assert file != null;
         fileChooser.setInitialFileName(file.getName().substring(0, file.getName().indexOf(".")) + "Signed" + file.getName().substring(file.getName().indexOf(".")));
         if (lastUsedDirectory != null){
-            fileChooser.setInitialDirectory(lastUsedDirectory);
+            fileChooser.setInitialDirectory(new File(lastUsedDirectory.getParent()));
         }
         fileSaver = fileChooser.showSaveDialog(owner);
         lastUsedDirectory = fileSaver;
@@ -227,7 +227,7 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All types", "*"));
         fileChooser.setTitle("Open signature");
         if (lastUsedDirectory != null){
-            fileChooser.setInitialDirectory(lastUsedDirectory);
+            fileChooser.setInitialDirectory(new File(lastUsedDirectory.getParent()));
         }
         File fileSignature = fileChooser.showOpenDialog(owner);
         lastUsedDirectory =fileSignature;

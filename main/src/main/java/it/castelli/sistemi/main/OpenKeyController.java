@@ -122,7 +122,7 @@ public class OpenKeyController implements Initializable {
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Key", "*.key"));
         if (lastUsedDirectory != null){
-            fileChooser.setInitialDirectory(lastUsedDirectory);
+            fileChooser.setInitialDirectory(new File(lastUsedDirectory.getParent()));
         }
         file = fileChooser.showOpenDialog(owner);
         lastUsedDirectory = file;
